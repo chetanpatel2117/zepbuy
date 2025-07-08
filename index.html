@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Zepbuy - Smart Shopping</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(120deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: #232f3e; /* Amazon dark blue */
+      overflow-x: hidden;
+    }
+
+    header {
+      background: linear-gradient(90deg, #232f3e 0%, #37475a 100%);
+      border-bottom: 4px solid #37475a;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      font-size: 2.2rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 8px #37475a44;
+      color: #ff9900;
+      background: none;
+      -webkit-background-clip: initial;
+      background-clip: initial;
+      -webkit-text-fill-color: initial;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 600;
+      padding: 6px 18px;
+      transition: color 0.3s, background 0.3s, box-shadow 0.3s;
+      border-radius: 20px;
+      position: relative;
+    }
+
+    nav a:hover {
+      color: #232f3e;
+      background: #e0e7ff;
+      box-shadow: 0 2px 8px #232f3e44;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem;
+      animation: fadein 1.5s ease;
+      background: linear-gradient(90deg, #fffbe7 0%, #e0e7ff 100%);
+      border-radius: 0 0 40px 40px;
+      box-shadow: 0 8px 32px #6a11cb11;
+      margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+      font-size: 3.2rem;
+      background: linear-gradient(90deg, #232f3e, #37475a 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: slidein 1s ease;
+      letter-spacing: 1.5px;
+      text-shadow: 0 2px 8px #6a11cb22;
+    }
+
+    .hero button {
+      padding: 1.1rem 2.2rem;
+      font-size: 1.1rem;
+      background: linear-gradient(90deg, #232f3e, #37475a);
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      border-radius: 30px;
+      margin-top: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 2px 12px #febd6933;
+      transition: background 0.3s, transform 0.2s, color 0.3s;
+      outline: none;
+    }
+
+    .hero button:hover {
+      background: linear-gradient(90deg, #37475a, #232f3e);
+      color: #fff;
+      box-shadow: 0 4px 18px #232f3e44;
+    }
+
+    .categories {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 2rem auto;
+      max-width: 1200px;
+      animation: fadein 1s ease-in-out;
+      overflow-x: auto;
+      background: #e0e7ff;
+      border-radius: 20px;
+      box-shadow: 0 2px 12px #232f3e11;
+      padding: 1rem 0.5rem;
+    }
+
+    .categories button {
+      padding: 1rem 2rem;
+      background: linear-gradient(90deg, #fff, #e0e7ff 80%);
+      border: 2px solid #37475a;
+      color: #232f3e;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s, box-shadow 0.3s;
+      border-radius: 16px;
+      font-size: 1.1rem;
+      box-shadow: 0 2px 8px #6a11cb11;
+      margin-bottom: 0.5rem;
+    }
+
+    .categories button:hover {
+      background: linear-gradient(90deg, #37475a, #232f3e 80%);
+      color: #fff;
+      box-shadow: 0 4px 16px #232f3e33;
+    }
+
+    .section-title {
+      margin: 2rem 2rem 1rem;
+      font-size: 2rem;
+      color: #232f3e;
+      text-shadow: 0 2px 8px #6a11cb11;
+      letter-spacing: 1px;
+      border-left: 6px solid #37475a;
+      padding-left: 12px;
+      background: #e0e7ff;
+      border-radius: 0 12px 12px 0;
+      display: inline-block;
+    }
+
+    .products {
+      display: flex;
+      overflow-x: auto;
+      padding: 0 2rem;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-card {
+      border: 2px solid #37475a;
+      background: linear-gradient(120deg, #fff 60%, #e0e7ff 100%);
+      border-radius: 16px;
+      padding: 1.2rem 1rem 1.2rem 1rem;
+      width: 220px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 16px #6a11cb11;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px) scale(1.04);
+      box-shadow: 0 8px 24px #6a11cb22;
+      border-color: #232f3e;
+      background: linear-gradient(120deg, #e0e7ff 60%, #fff 100%);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 120px;
+      background: #d3d3d3;
+      border-radius: 10px;
+      margin-bottom: 0.7rem;
+      box-shadow: 0 2px 8px #6a11cb11;
+    }
+
+    .product-card p {
+      margin: 0.3rem 0;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .product-card::after {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, #37475a 0%, #fff0 80%);
+      opacity: 0.15;
+      z-index: 0;
+    }
+
+    .product-detail, .checkout {
+      display: flex;
+      justify-content: space-between;
+      gap: 2rem;
+      margin: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .detail-box, .checkout-box {
+      border: 2px solid #37475a;
+      background: linear-gradient(120deg, #fff 60%, #e0e7ff 100%);
+      padding: 2rem 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px #6a11cb11;
+      transition: box-shadow 0.3s ease, border 0.3s;
+      margin-bottom: 1rem;
+    }
+
+    .detail-box:hover {
+      box-shadow: 0 6px 18px #6a11cb22;
+      border-color: #6a11cb;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 0.7rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      border: 1.5px solid #6a11cb;
+      font-size: 1rem;
+      background: #fffbe7;
+      color: #333;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    select:focus, input:focus {
+      border: 2px solid #2575fc;
+    }
+
+    .add-to-cart {
+      background: linear-gradient(90deg, #232f3e, #37475a);
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 1rem;
+      box-shadow: 0 2px 8px #febd6933;
+      transition: background 0.3s, transform 0.2s, color 0.3s;
+    }
+
+    .add-to-cart:hover {
+      background: linear-gradient(90deg, #37475a, #232f3e);
+      color: #fff;
+      box-shadow: 0 4px 16px #232f3e44;
+    }
+
+    .checkout-box {
+      border: 2px solid #37475a;
+      background: linear-gradient(120deg, #e0e7ff 60%, #fff 100%);
+    }
+
+    .checkout-box h3 {
+      color: #232f3e;
+      margin-bottom: 1rem;
+    }
+
+    .checkout-box strong {
+      color: #37475a;
+      font-size: 1.1rem;
+    }
+
+    @keyframes fadein {
+      from {opacity: 0; transform: translateY(30px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    @keyframes slidein {
+      from {opacity: 0; transform: translateX(-100px);}
+      to {opacity: 1; transform: translateX(0);}
+    }
+
+    @keyframes popin {
+      0% {transform: scale(0.7);}
+      80% {transform: scale(1.1);}
+      100% {transform: scale(1);}
+    }
+    @keyframes zepbuy-pop {
+      0% { transform: scale(0.7) rotate(-10deg); opacity: 0; }
+      60% { transform: scale(1.15) rotate(3deg); opacity: 1; }
+      80% { transform: scale(0.95) rotate(-2deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    @keyframes zepbuy-glow {
+      0% { text-shadow: 0 0 8px #ff9900, 0 0 16px #232f3e44; }
+      100% { text-shadow: 0 0 24px #ff9900, 0 0 32px #232f3e88; }
+    }
+
+    @media (max-width: 900px) {
+      .product-detail, .checkout {
+        flex-direction: column;
+        gap: 1rem;
+        margin: 1rem;
+      }
+      .categories {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .products {
+        gap: 0.7rem;
+        padding: 0 0.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .product-detail, .checkout {
+        flex-direction: column;
+      }
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .section-title {
+        font-size: 1.2rem;
+      }
+      .product-card {
+        width: 140px;
+        padding: 0.7rem;
+      }
+      .detail-box, .checkout-box {
+        padding: 1rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        padding: 0.7rem 0.5rem;
+      }
+      .logo {
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+      }
+      nav {
+        display: block;
+        width: 100%;
+      }
+      .nav-toggle {
+        display: block;
+        background: #232f3e;
+        color: #fff;
+        border: none;
+        width: 100%;
+        padding: 0.8rem 0;
+        font-size: 1.1rem;
+        font-weight: bold;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+      }
+      nav a {
+        display: none;
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+        text-align: left;
+        padding: 12px 18px;
+        font-size: 1.05rem;
+        background: #e0e7ff;
+        color: #232f3e;
+        border-bottom: 1px solid #37475a22;
+      }
+      nav a:last-child {
+        border-radius: 0 0 8px 8px;
+        border-bottom: none;
+      }
+      nav.open a {
+        display: block;
+      }
+    }
+    @media (min-width: 601px) {
+      .nav-toggle {
+        display: none;
+      }
+    }
+    /* Highlight effect for unique design */
+    .highlight {
+      background: linear-gradient(90deg, #e0e7ff 40%, #fff 100%);
+      color: #232f3e;
+      box-shadow: 0 2px 8px #232f3e44;
+      display: inline-block;
+      margin-bottom: 0.5em;
+      font-size: 1.1em;
+      padding: 0.3em 0.7em;
+      border-radius: 12px;
+      font-weight: bold;
+    }
+
+    /* Unique badge for offers */
+    .badge-offer {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: linear-gradient(90deg, #232f3e, #37475a);
+      color: #fff;
+      font-size: 0.85em;
+      font-weight: bold;
+      padding: 0.3em 0.8em;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px #232f3e44;
+      z-index: 2;
+      letter-spacing: 1px;
+    }
+
+    /* Unique shadow for hero */
+    .hero {
+      box-shadow: 0 8px 32px #ffda7711, 0 0px 0px #6a11cb11;
+    }
+  </style>
+  <script>
+    // Mobile nav toggle for phone size
+    document.addEventListener('DOMContentLoaded', function() {
+      var nav = document.querySelector('nav');
+      var toggle = nav.querySelector('.nav-toggle');
+      if (toggle) toggle.remove();
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo">Zepbuy</div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Shop</a>
+      <a href="#">Categories</a>
+      <a href="#">AI Recommendations</a>
+      <a href="#">Offers</a>
+      <a href="#">Cart</a>
+      <a href="login page.html" id="loginLink">Login</a>
+      <div id="profileIcon" style="display:none; position:relative; margin-left:20px; cursor:pointer;">
+        <img src="https://ui-avatars.com/api/?name=User" alt="Profile" style="width:38px;height:38px;border-radius:50%;border:2px solid #ff9900;">
+        <div id="profileDropdown" style="display:none;position:absolute;right:0;top:48px;background:#fff;color:#232f3e;border-radius:10px;box-shadow:0 4px 16px #232f3e22;padding:1rem;min-width:220px;z-index:999;">
+          <div id="profileDetails">
+            <strong>Name:</strong> <span id="profileName"></span><br>
+            <strong>Email:</strong> <span id="profileEmail"></span><br>
+            <strong>Phone:</strong> <span id="profilePhone"></span><br>
+            <strong>Address:</strong> <span id="profileAddress"></span><br>
+            <button id="logoutBtn" style="margin-top:10px;padding:0.5rem 1rem;background:#ff9900;color:#fff;border:none;border-radius:6px;cursor:pointer;">Logout</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Smart Shopping, Powered by AI</h1>
+    <button>Start Shopping</button>
+  </section>
+  <section class="categories">
+    <button>Electronics</button>
+    <button>Mobile</button>
+    <button>Books</button>
+    <button>Beauty & Health</button>
+    <button>Sports & Outdoors</button>
+    <button>Groceries</button>
+    <button>Automotive</button>
+    <button>Kids & Toys</button>
+    <button>Furniture</button>
+    <button>Fashion</button>
+    <button>Home & Kitchen</button>
+    <button>Offers</button>
+   
+  </section>
+
+  <h2 class="section-title">Personalized for You</h2>
+  <section class="products">
+    <div class="product-card">
+      <img />
+      <p>Product</p>
+      <p>₹ 0.00</p>
+    </div>
+    <div class="product-card">
+      <img />
+      <p>Product</p>
+      <p>₹ 0.00</p>
+    </div>
+    <div class="product-card">
+      <img />
+      <p>Product</p>
+      <p>₹ 0.00</p>
+    </div>
+    <div class="product-card">
+      <img />
+      <p>Try it on virtually</p>
+    </div>
+  </section>
+
+  <div class="product-detail">
+    <div class="detail-box">
+      <img style="width:100%; height:200px; background:#ccc; border-radius:10px;" />
+      <h3>Product</h3>
+      <p>₹ 0.00</p>
+      <label>Size</label>
+      <select><option>Small</option><option>Medium</option><option>Large</option></select>
+      <label>Quantity</label>
+      <input type="number" value="1" min="1" />
+      <button class="add-to-cart">Add to Cart</button>
+    </div>
+
+    <div class="detail-box">
+      <h2>AI-powered Recommendations</h2>
+      <h4>Customers also bought</h4>
+      <div class="products">
+        <div class="product-card"><img /><p>Product</p><p>₹ 0.00</p></div>
+        <div class="product-card"><img /><p>Product</p><p>₹ 0.00</p></div>
+      </div>
+      <h4>You might like</h4>
+      <div class="products">
+        <div class="product-card"><img /><p>Product</p><p>₹ 0.00</p></div>
+        <div class="product-card"><img /><p>Product</p><p>₹ 0.00</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="checkout">
+    <div class="checkout-box">
+      <h3>Billing Details</h3>
+      <p>Name: __________</p>
+      <p>Address: __________</p>
+      <p>Contact: __________</p>
+    </div>
+    <div class="checkout-box">
+      <h3>Payment Summary</h3>
+      <p>Order Total: ₹ ___</p>
+      <p>Shipping: ₹ ___</p>
+      <p><strong>Order successfully placed!</strong></p>
+    </div>
+  </div>
+  <script>
+  const BASE_URL = 'http://localhost:3000';
+
+  // Fetch and display products on page load
+  async function loadProducts() {
+    const res = await fetch(`${BASE_URL}/products`);
+    const products = await res.json();
+    const productsSection = document.querySelector('.products');
+    productsSection.innerHTML = '';
+    products.forEach(product => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.innerHTML = `
+        <img src="${product.image || ''}" alt="${product.name}" />
+        <p>${product.name}</p>
+        <p>₹ ${product.price.toFixed(2)}</p>
+        <button class="add-to-cart">Add to Cart</button>
+      `;
+      productsSection.appendChild(card);
+    });
+  }
+
+  window.addEventListener('DOMContentLoaded', loadProducts);
+
+  document.getElementById('login').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const email = this.querySelector('input[type="email"]').value;
+    const password = this.querySelector('input[type="password"]').value;
+
+    const res = await fetch(`${BASE_URL}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+    alert(data.message || data.error);
+  });
+
+  document.getElementById('register').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const inputs = this.querySelectorAll('input');
+    const body = {
+      name: inputs[0].value,
+      email: inputs[1].value,
+      phone: inputs[2].value,
+      street: inputs[3].value,
+      city: inputs[4].value,
+      pincode: inputs[5].value,
+      state: inputs[6].value,
+      password: inputs[7].value,
+    };
+
+    const res = await fetch(`${BASE_URL}/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    const data = await res.json();
+    alert(data.message || data.error);
+  });
+
+  // Profile icon logic
+function showProfileIcon(user) {
+  document.getElementById('loginLink').style.display = 'none';
+  const icon = document.getElementById('profileIcon');
+  icon.style.display = 'inline-block';
+  document.getElementById('profileName').textContent = user.name || '';
+  document.getElementById('profileEmail').textContent = user.email || '';
+  document.getElementById('profilePhone').textContent = user.phone || '';
+  document.getElementById('profileAddress').textContent = (user.address || '') + (user.city ? ', ' + user.city : '') + (user.state ? ', ' + user.state : '') + (user.pincode ? ', ' + user.pincode : '');
+}
+
+// Toggle profile dropdown
+const profileIcon = document.getElementById('profileIcon');
+const profileDropdown = document.getElementById('profileDropdown');
+profileIcon.addEventListener('click', function(e) {
+  e.stopPropagation();
+  profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
+});
+document.addEventListener('click', function() {
+  profileDropdown.style.display = 'none';
+});
+
+// Simulate login state (replace with real check, e.g. JWT/localStorage)
+const user = JSON.parse(localStorage.getItem('zepbuyUser'));
+if (user && user.email) {
+  showProfileIcon(user);
+}
+
+// Logout
+const logoutBtn = document.getElementById('logoutBtn');
+logoutBtn.addEventListener('click', function() {
+  localStorage.removeItem('zepbuyUser');
+  window.location.reload();
+});
+</script>
+
+</body>
+</html>

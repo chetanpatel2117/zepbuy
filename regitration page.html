@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register | Zepbuy</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #84a9fa, #8fd3f4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 350px;
+    }
+    h2 {
+      text-align: center;
+      color: #2196f3;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    input {
+      margin: 0.5rem 0;
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 0.75rem;
+      background-color: #2196f3;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1976d2;
+    }
+    .link {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .link a {
+      text-decoration: none;
+      color: #2196f3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Register</h2>
+    <form id="registerForm">
+      <input type="text" name="name" placeholder="Full Name" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="tel" name="phone" placeholder="Phone Number" required />
+      <input type="text" name="address" placeholder="Address" required />
+      <input type="text" name="city" placeholder="City" required />
+      <input type="text" name="state" placeholder="State" required />
+      <input type="text" name="pincode" placeholder="Pincode" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button type="submit">Register</button>
+    </form>
+    <div class="link">
+      Already registered? <a href="login page.html" id="toLogin">Login</a>
+    </div>
+  </div>
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      const res = await fetch("http://localhost:3000/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      const msg = await res.text();
+      alert(msg);
+      if (msg.toLowerCase().includes('success')) {
+        window.location.href = 'login page.html';
+      }
+    });
+    document.getElementById('toLogin').addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = 'login page.html';
+    });
+  </script>
+</body>
+</html>
